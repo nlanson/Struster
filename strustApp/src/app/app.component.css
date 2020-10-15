@@ -1,0 +1,25 @@
+.searchBar {
+  text-align: center;
+  padding: 1%;
+}
+
+.searchBar button {
+  margin-left: 1%;
+}
+
+.loadBtn {
+  text-align: center;
+}
+
+.Video {
+  text-align: center;
+
+}
+
+.ServerError {
+  text-align: center;
+}
+
+.FileNotFound {
+  text-align: center;
+}

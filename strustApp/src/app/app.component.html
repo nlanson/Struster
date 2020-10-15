@@ -1,0 +1,33 @@
+<mat-toolbar color="primary" class="topBar">
+    <div fxFlex> </div>
+    <div  fxFlex>
+      Struster
+    </div>
+    <button mat-raised-button color="accent" (click)="update()">Update Registry</button>
+</mat-toolbar>
+
+<div class="searchBar">
+  <form flex [formGroup]="search" (ngSubmit)="submit()">
+    <mat-form-field appearance="fill">
+      <mat-label>Search</mat-label>
+      <input matInput formControlName="searchTerm">
+    </mat-form-field>
+    <button mat-raised-button color="accent">Search!</button>
+  </form>
+</div>
+
+<div class="loadBtn" *ngIf="showBtn">
+  <button mat-raised-button color="accent" (click)="loadVid()">Load Video: {{ searchTerm }}</button>
+</div>
+
+<div class="Video" *ngIf="showVid">
+  <iframe [src]="vidurl" width="1000" height="562" allowfullscreen allowtransparency allow="autoplay" scrolling="no" frameborder="0"></iframe>
+</div>
+
+<div class="ServerError" *ngIf="registery.status != 200">
+  <p>Server Error {{registery.status}}</p>
+</div>
+
+<div class="FileNotFound" *ngIf="NotFoundToggle">
+  <p>{{  NotFoundDisplay }}</p>
+</div>
