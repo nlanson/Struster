@@ -1,33 +1,118 @@
-<mat-toolbar color="primary" class="topBar">
-    <div fxFlex> </div>
-    <div  fxFlex>
-      Struster
+<div class="background">
+  <mat-toolbar color="primary" class="topBar">
+      <div fxFlex> </div>
+      <div  fxFlex class="toolbar-title">
+        <h1>Struster</h1>
+      </div>
+      <button mat-raised-button color="accent" (click)="searchBtn()" class="toolbar-buttons">Search</button>
+      <button mat-raised-button color="accent" (click)="upload()" class="toolbar-buttons">Upload</button>
+      <button mat-raised-button color="accent" (click)="update()" class="toolbar-buttons">Update Registry</button>
+  </mat-toolbar>
+
+  <div class="searchBar" *ngIf="showSearch">
+    <form flex [formGroup]="search" (ngSubmit)="submit()">
+      <mat-form-field appearance="fill">
+        <mat-label>Search</mat-label>
+        <input matInput formControlName="searchTerm">
+      </mat-form-field>
+      <button mat-raised-button color="accent">Search!</button>
+    </form>
+      <button mat-raised-button color="accent" (click)="list()" class="toolbar-buttons" *ngIf="!showList">List All</button>
+      <button mat-raised-button color="accent" (click)="closeList()" class="toolbar-buttons" *ngIf="showList">Close List</button>
+  </div>
+
+  <!--Search Bar-->
+  <div class="searchBar" *ngIf="showUpload">
+    <form flex [formGroup]="uploadForm" (ngSubmit)="remoteUpload()">
+      <mat-form-field appearance="fill">
+        <mat-label>Enter Video Name</mat-label>
+        <input matInput formControlName="uploadName">
+      </mat-form-field>
+      <br>
+      <mat-form-field appearance="fill">
+        <mat-label>Enter Upload URL</mat-label>
+        <input matInput formControlName="uploadURL">
+      </mat-form-field>
+      <br>
+      <button mat-raised-button color="accent" class="uploadBtn">Upload!</button>
+    </form>
+  </div>
+
+  <!--Load Video Button-->
+  <div class="loadBtn" *ngIf="showBtn">
+    <button mat-raised-button color="accent" (click)="loadVid()">Load Video: {{ searchTerm }}</button>
+  </div>
+
+  <!--Video iframe-->
+  <div class="Video" *ngIf="showVid">
+    <iframe [src]="vidurl" width="1000" height="562" allowfullscreen allowtransparency allow="autoplay" scrolling="no" frameborder="0"></iframe>
+  </div>
+
+  <!--Server Error-->
+  <div class="ServerError" *ngIf="registery.status != 200">
+    <p>Server Error {{registery.status}}</p>
+  </div>
+
+  <!--File Not Found-->
+  <div class="FileNotFound" *ngIf="NotFoundToggle">
+    <p>{{  NotFoundDisplay }}</p>
+  </div>
+
+  <!--Upload Status-->
+  <div class="uploadStatus" *ngIf="showUploadStatus">
+    <!--Upload Success-->
+    <div *ngIf="uploadSuccess">
+      <h3>{{  uploadStatusMsg }}</h3>
+
+      <p> Upload Name: {{  uploadName }}</p>
+
+      <p>Upload Link: {{  uploadLink }}</p>
+
+      <p>Video will be viewable after upload completes.</p>
     </div>
-    <button mat-raised-button color="accent" (click)="update()">Update Registry</button>
-</mat-toolbar>
+    <!--Upload Error-->
+    <div *ngIf="!uploadSuccess">
+      <h3>{{  uploadStatusMsg }} whilst uploading</h3>
 
-<div class="searchBar">
-  <form flex [formGroup]="search" (ngSubmit)="submit()">
-    <mat-form-field appearance="fill">
-      <mat-label>Search</mat-label>
-      <input matInput formControlName="searchTerm">
-    </mat-form-field>
-    <button mat-raised-button color="accent">Search!</button>
-  </form>
-</div>
+      <p> Upload Name: {{  uploadName }}</p>
 
-<div class="loadBtn" *ngIf="showBtn">
-  <button mat-raised-button color="accent" (click)="loadVid()">Load Video: {{ searchTerm }}</button>
-</div>
+      <p>Upload Link: {{  uploadLink }}</p>
+    </div>
+  </div>
 
-<div class="Video" *ngIf="showVid">
-  <iframe [src]="vidurl" width="1000" height="562" allowfullscreen allowtransparency allow="autoplay" scrolling="no" frameborder="0"></iframe>
-</div>
+  <!--List-->
+  <div class="list" *ngIf="showList">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8"> <!--Data Source and Colums pre-defined in update() and variable initialisation-->
 
-<div class="ServerError" *ngIf="registery.status != 200">
-  <p>Server Error {{registery.status}}</p>
-</div>
+      <ng-container matColumnDef="Name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let video" class="tableCell"> {{video.name}} </td>
+      </ng-container>
 
-<div class="FileNotFound" *ngIf="NotFoundToggle">
-  <p>{{  NotFoundDisplay }}</p>
+      <ng-container matColumnDef="Size">
+        <th mat-header-cell *matHeaderCellDef> Size </th>
+        <td mat-cell *matCellDef="let video" class="tableCell"> {{video.size}} bytes </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Direct Link">
+        <th mat-header-cell *matHeaderCellDef> Direct Link </th>
+        <td mat-cell *matCellDef="let video" class="tableCell"><button mat-raised-button color="primary" (click)="navigate(video.link)">External Link <mat-icon [inline]="true">launch</mat-icon></button></td>
+      </ng-container>
+
+      <ng-container matColumnDef="Stream">
+        <th mat-header-cell *matHeaderCellDef> Stream </th>
+        <td mat-cell *matCellDef="let video" class="tableCell"><button mat-raised-button color="accent" (click)="viewFromList(video.linkid)">Watch</button></td>
+      </ng-container>
+
+      <ng-container matColumnDef="Delete">
+        <th mat-header-cell *matHeaderCellDef> Delete </th>
+        <td mat-cell *matCellDef="let video" class="tableCell"> <button mat-mini-fab color="warn" (click)="deleteVid(video.linkid)"><mat-icon>delete</mat-icon></button> </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <br>
+    <br>
+  </div>
 </div>

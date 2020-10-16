@@ -34,3 +34,32 @@ export interface file {
   linkid: string,
   convert: string
 }
+
+export interface api_keys {
+  login: String,
+  key: String,
+  folder_id: String
+}
+
+export interface remoteUploadRes {
+  status: number,
+  msg: string,
+  result: remoteUploadInfo
+}
+
+export interface remoteUploadInfo {
+  id: string,
+  folderid: string
+}
+
+export interface renameRes {
+  status: number,
+  msg: string,
+  result: boolean
+}
+
+export interface deleteRes {
+  status: number,
+  msg: string,
+  result: boolean
+}

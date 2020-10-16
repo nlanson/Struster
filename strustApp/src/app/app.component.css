@@ -1,3 +1,8 @@
+.background {
+  background-color: #c4c4c4;
+  min-height: 100vh;
+}
+
 .searchBar {
   text-align: center;
   padding: 1%;
@@ -22,4 +27,30 @@
 
 .FileNotFound {
   text-align: center;
+}
+
+.toolbar-buttons{
+  margin: 7px;
+
+}
+
+.uploadStatus{
+  text-align: center;
+  margin-top: 10px;
+}
+
+.list {
+  text-align: center;
+}
+
+.list table {
+  margin-left: auto;
+  margin-right: auto;
+}
+.list th {
+  text-align: center;
+}
+
+.tableCell {
+  padding: 10px;
 }
