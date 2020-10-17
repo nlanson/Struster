@@ -1,0 +1,29 @@
+.LoginForm {
+  text-align: center;
+  padding: 1%;
+}
+
+.loginErrorMsg {
+  font-size: small;
+}
+
+.toolbar-buttons{
+  margin: 7px;
+}
+
+.loginTitle {
+  text-align: center;
+}
+
+.AppTitle {
+  position: absolte;
+  text-align: center;
+}
+
+.AppTitle h1 {
+  margin-left: 23%;
+}
+
+.background {
+  height: 100vh;
+}
