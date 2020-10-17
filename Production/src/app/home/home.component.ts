@@ -209,7 +209,7 @@ async update(){
   } //end upload
 
   async remoteUpload() {
-    this.uploadName = this.uploadForm.value.uploadName;
+    this.uploadName = this.uploadForm.value.uploadName.toLowerCase();
     this.uploadLink = this.uploadForm.value.uploadURL;
 
     this.uploadAPI = "https://api.streamtape.com/remotedl/add?login=" + this.api_key.login + "&key=" + this.api_key.key + "&url=" + this.uploadLink + "&folder=" + this.api_key.folder_id + "&name=" + this.uploadName;
