@@ -6,14 +6,14 @@
 
 <div class="LoginForm">
     <form flex [formGroup]="LoginForm" (ngSubmit)="submit()">
-      <mat-form-field appearance="fill">
+      <mat-form-field appearance="outline">
         <mat-label>Username</mat-label>
-        <input matInput formControlName="u">
+        <input matInput formControlName="u" class="input">
       </mat-form-field>
       <br>
-      <mat-form-field appearance="fill">
+      <mat-form-field appearance="outline">
         <mat-label>Password</mat-label>
-        <input type="password" matInput formControlName="p">
+        <input type="password" matInput formControlName="p" class="input">
       </mat-form-field>
       <br>
       <button mat-raised-button color="accent">Login</button>

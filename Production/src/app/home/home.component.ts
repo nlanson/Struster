@@ -48,6 +48,7 @@ export class HomeComponent implements OnInit {
     linkid: "not applicable",
     convert: "none"
   };
+  vidName: string;
 
   NotFoundToggle: boolean;
   NotFoundDisplay: string;
@@ -142,6 +143,7 @@ async update(){
 
   }//end update
 
+
   listSort(listArray: Array<file>){
       for(let i=0; i<listArray.length; i++){
         if(
@@ -156,12 +158,14 @@ async update(){
         }
         listArray[i].name = listArray[i].name.slice(0, str_len);
       }
+      /* This commented part returns the listArray in alphabetical order, but it is uneccesary to it is disabled.
       listArray.sort(function(a, b) {
         var textA = a.name.toUpperCase();
         var textB = b.name.toUpperCase();
         return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
       });
-      return listArray;
+      */
+      return listArray.reverse();
   } //end sort
 
   submit() {
@@ -196,9 +200,31 @@ async update(){
     } else {
       let concat = "https://streamtape.com/e/" + this.file.linkid;
       this.vidurl = this.sanitizer.bypassSecurityTrustResourceUrl(concat);
+      this.vidName = this.file.name;
       this.showVid = true;
     }
   }//end load
+
+  viewFromList(linkid: String, name: string) {
+    this.showList = false;
+    this.NotFoundToggle = false;
+
+    let concat = "https://streamtape.com/e/" + linkid;
+    this.vidurl = this.sanitizer.bypassSecurityTrustResourceUrl(concat);
+    this.showVid = true;
+    this.vidName = name;
+  }//end viewFromList
+
+  list(){
+    if(this.registery.status == 200 ) {
+      this.showList = true;
+      this.showUploadStatus = false;
+    }
+  } //end showList
+
+  closeList() {
+    this.showList = false;
+  }
 
   upload() {
     console.log("upload received");
@@ -229,26 +255,6 @@ async update(){
     }
 
   }//end remoteUpload
-
-  list(){
-    if(this.registery.status == 200 ) {
-      this.showList = true;
-      this.showVid = false;
-      this.showUploadStatus = false;
-    }
-  } //end showList
-
-  closeList() {
-    this.showList = false;
-  }
-
-  viewFromList(linkid: String) {
-    this.showList = false;
-
-    let concat = "https://streamtape.com/e/" + linkid;
-    this.vidurl = this.sanitizer.bypassSecurityTrustResourceUrl(concat);
-    this.showVid = true;
-  }//end viewFromList
 
   navigate(link: string) {
     window.open(link, "_blank");

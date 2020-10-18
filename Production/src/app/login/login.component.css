@@ -27,3 +27,25 @@
 .background {
   height: 100vh;
 }
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  color: #3F51B5 !important;
+}
+
+::ng-deep mat-form-field {
+  color: white!important;
+}
+::ng-deep mat-form-field  .mat-form-field-label {
+  color: white!important;
+}
+
+::ng-deep mat-form-field .mat-form-field-underline {
+  background-color: white!important;
+}
+
+
+
+
+
+
+

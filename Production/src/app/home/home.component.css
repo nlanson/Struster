@@ -1,3 +1,18 @@
+.WhiteText {
+  color: white;
+}
+
+.Video {
+  text-align: center;
+  margin-left: 25%;
+  margin-right: 25%;
+
+}
+
+.vidTitle{
+  text-align: left;
+}
+
 .toolbar-buttons{
   margin: 7px;
 }
@@ -37,11 +52,6 @@
   text-align: center;
 }
 
-.Video {
-  text-align: center;
-
-}
-
 .ServerError {
   text-align: center;
 }
@@ -74,4 +84,19 @@
 
 .tableCell {
   padding: 10px;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  color: #3F51B5 !important;
+}
+
+::ng-deep mat-form-field {
+  color: white!important;
+}
+::ng-deep mat-form-field  .mat-form-field-label {
+  color: white!important;
+}
+
+::ng-deep mat-form-field .mat-form-field-underline {
+  background-color: white!important;
 }

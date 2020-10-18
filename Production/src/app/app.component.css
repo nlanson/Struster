@@ -16,6 +16,10 @@
 }
 
 .background {
-  height: 100vh;
+  min-height: 100vh;
+  background-image: url('../assets/background.png');
+  background-color: #5262ba;
+  background-repeat: repeat;
+
 }
 
