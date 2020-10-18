@@ -8,6 +8,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import { LoginService } from '../login-service.service';
 import { Router } from '@angular/router';
+import { apiKeys } from '../interfaces/login';
 
 import {
   Reg,
@@ -79,6 +80,7 @@ export class HomeComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private ls: LoginService,
     private route: Router,
+    private apiKeys: apiKeys
 
     ) { }
 
@@ -116,11 +118,7 @@ export class HomeComponent implements OnInit {
   setAPI(){
     this.base = "https://api.streamtape.com/file/listfolder?login="
 
-    this.api_key = {
-      login: "09c8392061b548eebd4e", //change api login here
-      key: "Z1doL1Qjm6Fq9Yd", //change api key here
-      folder_id: "DjOleF2OpRk" //change folder id here
-    };
+    this.api_key = this.apiKeys.apiKey;
 
     this.api_url = this.base + this.api_key.login + "&key=" + this.api_key.key + "&folder=" + this.api_key.folder_id;
   }//end API link set

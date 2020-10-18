@@ -5,11 +5,26 @@ export interface LoginIndv {
   password: string
 }
 
+export interface apiKey {
+  login: string,
+  key: string,
+  folder_id: string
+}
+
 export class Login {
+  //add you own custom logins here.
   LoginList: Array<LoginIndv> = [
-    {username: "owo", password:"owo"},
-    {username: "test", password:"test"},
+    {username: "nlanson", password:" "},
+    {username: "test", password:"test1234"},
   ]
+}
 
-
+export class apiKeys {
+  //use your streamtape api keys here.
+  //the folder_id is the folder where all the videos will be fetch and uploaded to.
+  apiKey: apiKey = {
+    login: "09c8392061b548eebd4e",
+    key: "hidden",
+    folder_id: "DjOleF2OpRk"
+  }
 }

@@ -19,7 +19,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
-import { Login } from './interfaces/login';
+import { apiKeys, Login } from './interfaces/login';
 
 @NgModule({
   declarations: [
@@ -45,7 +45,7 @@ import { Login } from './interfaces/login';
         MatSnackBarModule,
 
   ],
-  providers: [AppComponent, HomeComponent, Login],
+  providers: [AppComponent, HomeComponent, Login, apiKeys],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
