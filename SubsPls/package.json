@@ -11,6 +11,7 @@
   "dependencies": {
     "node-torrent": "^0.2.2",
     "rss-parser": "^3.9.0",
-    "transmission": "^0.4.10"
+    "transmission": "^0.4.10",
+    "webtorrent": "^0.108.6"
   }
 }

@@ -1,34 +1,19 @@
-let Parser = require('rss-parser');
-let parser = new Parser();
-let Client = require('node-torrent');
-let client = new Client({logLevel: 'DEBUG'});
-let fs = require('fs');
+const Parser = require('rss-parser');
+const parser = new Parser();
+const fs = require('fs');
+const WebTorrent = require('webtorrent');
 
+let link = new String;
+let title = new String;
 
-
-function torrent(link){
-    var torrent = client.addTorrent(link);
-    // when the torrent completes, move it's files to another area
-    torrent.on('complete', function() {
-        console.log('complete!');
-        torrent.files.forEach(function(file) {
-            var newPath = './dl' + file.path;
-            fs.rename(file.path, newPath);
-            // while still seeding need to make sure file.path points to the right place
-            file.path = newPath;
-        });
-    });
-}
-
-
-
+/*  This code block gets titles and links from SubsPlease RSS Feed.
+    It is disabled for development.
 (async () => {
     let rssLink = "https://subsplease.org/rss/?t&r=720"; //nyaa URL
     let rssMagLink = "https://subsplease.org/rss/?r=720"; //magnet URL
-    let feed = await parser.parseURL(rssMagLink);
+    let feed = await parser.parseURL(rssLink);
     console.log(feed.title);
-   
-    let link = new String;
+
     feed.items.forEach(item => {
         var str_len = item.title.length -22;        
         item.title = item.title.slice(13, str_len);
@@ -36,7 +21,36 @@ function torrent(link){
         link = item.link;
     });
     console.log(link);
-    //torrent(link);
    
-  })(); 
-  
+})(); 
+*/
+
+title = "[SubsPlease] Higurashi no Naku Koro ni Gou - 03 (720p) [1DEA5328].mkv";
+link = "https://nyaa.si/view/1292504/torrent";
+
+
+torrent(title, link);
+
+function torrent(title, link) {
+    var client = new WebTorrent()
+    var opts = {
+        path: "./dl" // Folder to download files to (default=`/tmp/webtorrent/`)
+    };
+
+    client.add(link, opts, function (torrent) {
+        console.log('Client is downloading:', torrent.infoHash);
+        torrent.on('done', function () {
+            console.log("Download finished");
+            var oldPath = "./dl/" + title;
+            var newPath = "./dl/" + "newTitle.mkv";
+            fs.rename(oldPath, newPath, () => { 
+                console.log("\nFile Renamed!\n"); 
+            });
+            torrent.destroy();
+            client.destroy();
+        });
+        torrent.on('error', function (err) {
+            console.log("Err: " + err);
+        })
+    });
+}
