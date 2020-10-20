@@ -1,3 +1,4 @@
+//streamtape interfaces
 export interface backendRes {
   name: String,
   fid: String
