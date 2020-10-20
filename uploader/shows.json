@@ -1,42 +1,46 @@
 {
-  "link_v": "2",  
-
   "show_list": [
-      {
-        "upload_name": "Taisou Zamurai",
-        "url_id": "Taisou-Zamurai",
-        "current_episode": 3,
-        "day": 0
-      },
-      {
-        "upload_name": "Kamisama ni Natta Hi",
-        "url_id": "Kamisama-ni-Natta-Hi",
-        "current_episode": 3,
-        "day": 0
-      },
-      {
-        "upload_name": "Higurashi no Naku Koro Ni (2020)",
-        "url_id": "Higurashi-no-Naku-Koro-ni-2020",
-        "current_episode": 4,
-        "day": 5
-      },
-      {
-        "upload_name": "Haikyuu!!: To the Top S2",
-        "url_id": "Haikyuu!!-To-the-Top-2nd-Season",
-        "current_episode": 4,
-        "day": 6
-      },
-      {
-        "upload_name": "Jujutsu Kaisen",
-        "url_id": "Jujutsu-Kaisen",
-        "current_episode": 4,
-        "day": 6
-      },
-      {
-        "upload_name": "Tonikaku Kawaii",
-        "url_id": "Tonikaku-Kawaii",
-        "current_episode": 4,
-        "day": 6
-      }
-    ]
+    {
+      "upload_name": "Taisou Zamurai",
+      "url_id": "Taisou-Zamurai",
+      "current_episode": 3,
+      "day": 0,
+      "link_v": "2"
+    },
+    {
+      "upload_name": "Kamisama ni Natta Hi",
+      "url_id": "Kamisama-ni-Natta-Hi",
+      "current_episode": 3,
+      "day": 0,
+      "link_v": "2"
+    },
+    {
+      "upload_name": "Higurashi no Naku Koro Ni (2020)",
+      "url_id": "Higurashi-no-Naku-Koro-ni-2020",
+      "current_episode": 4,
+      "day": 5,
+      "link_v": "2"
+    },
+    {
+      "upload_name": "Haikyuu!!: To the Top S2",
+      "url_id": "Haikyuu!!-To-the-Top-2nd-Season",
+      "current_episode": 4,
+      "day": 6,
+      "link_v": "2"
+    },
+    {
+      "upload_name": "Jujutsu Kaisen",
+      "url_id": "Jujutsu-Kaisen",
+      "current_episode": 4,
+      "day": 6,
+      "link_v": "2"
+    },
+    {
+      "upload_name": "Tonikaku Kawaii",
+      "url_id": "Tonikaku-Kawaii",
+      "current_episode": 4,
+      "day": 6,
+      "link_v": "2"
+    }
+  ]
 }

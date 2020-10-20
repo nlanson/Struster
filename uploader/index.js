@@ -23,7 +23,7 @@ async function main() {
             currEpString = currEp.toString();
         }
 
-        let baseURL = "https://storage.googleapis.com/justawesome-183319.appspot.com/v" + list.link_v + ".4animu.me";
+        let baseURL = "https://storage.googleapis.com/justawesome-183319.appspot.com/v" + list.show_list[i].link_v + ".4animu.me";
         let episodeURL = baseURL + "/" + urlId + "/" + urlId + "-Episode-" + currEpString +"-1080p.mp4";
         let uploadName = list.show_list[i].upload_name + " ep" + currEp.toString();
         let apiURL = "https://api.streamtape.com/remotedl/add?login=09c8392061b548eebd4e&key=Z1doL1Qjm6Fq9Yd&url=" + episodeURL +"&folder=DjOleF2OpRk&name=" + uploadName.toLowerCase();

@@ -41,6 +41,7 @@ function Add() {
     
     upload_name = prompt('Show name (to use for uploads): ');
     url_id = prompt('URL id to fetch each episode: ');
+    link_v = prompt('CloudAPI version? (Legacy not configured. Options: 6/2)')
     day = prompt('What day of the week to fetch show?');
     current_episode = prompt('What is the next airing episode? (Default = 1): ');
 
@@ -57,7 +58,8 @@ function Add() {
                 "upload_name": upload_name,
                 "url_id": url_id,
                 "day": day,
-                "current_episode": current_episode
+                "current_episode": current_episode,
+                "link_v": link_v
             };
             
             list.show_list.push(new_show);
