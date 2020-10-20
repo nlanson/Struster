@@ -1,0 +1,16 @@
+{
+  "name": "subspls",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-torrent": "^0.2.2",
+    "rss-parser": "^3.9.0",
+    "transmission": "^0.4.10"
+  }
+}
