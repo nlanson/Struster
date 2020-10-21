@@ -1,10 +1,16 @@
+const https = require('https');
 const Parser = require('rss-parser');
 const parser = new Parser();
 const fs = require('fs');
 const WebTorrent = require('webtorrent');
+//const path = './shows.json';
+//const shows = require(path);
+//let rawdata = fs.readFileSync(path);
+//let list = JSON.parse(rawdata);
 
 let link = new String;
 let title = new String;
+
 
 /*  This code block gets titles and links from SubsPlease RSS Feed.
     It is disabled for development.
@@ -28,7 +34,6 @@ let title = new String;
 title = "[SubsPlease] Higurashi no Naku Koro ni Gou - 03 (720p) [1DEA5328].mkv";
 link = "https://nyaa.si/view/1292504/torrent";
 
-
 torrent(title, link);
 
 function torrent(title, link) {
@@ -44,13 +49,41 @@ function torrent(title, link) {
             var oldPath = "./dl/" + title;
             var newPath = "./dl/" + "newTitle.mkv";
             fs.rename(oldPath, newPath, () => { 
-                console.log("\nFile Renamed!\n"); 
+                console.log("File Renamed!"); 
             });
             torrent.destroy();
-            client.destroy();
+            client.destroy( function () {
+                getUploadLink(newPath, () => {
+                    console.log("This is the callback!!");
+                });
+            });
         });
         torrent.on('error', function (err) {
             console.log("Err: " + err);
         })
     });
 }
+
+async function getUploadLink(newPath, _callback) {
+    console.log("getting link");
+    let data = '';
+    
+    https.get("https://api.streamtape.com/file/ul?login=09c8392061b548eebd4e&key=Z1doL1Qjm6Fq9Yd&folder=DjOleF2OpRk" , (res) => {
+        res.on('data', (chunk) => {
+          data += chunk;
+        });
+        res.on('end', () => {
+          data = JSON.parse(data);
+          console.log(data.result.url);
+          uploadVid(data.result.url, newPath, _callback);
+        });
+    }).on("error", (err) => {
+        console.log("Error: " + err.message);
+    });
+
+}
+
+function uploadVid(uploadUrl, vidPath, _callback) {
+    
+}
+
