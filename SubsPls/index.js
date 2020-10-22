@@ -42,15 +42,15 @@ let title = new String;
 function torrent(title, link, pathTitle) {
     var client = new WebTorrent()
     var options = {
-        path: "./dl" // Folder to download files to (default=`/tmp/webtorrent/`)
+        path: "/media/nlanson/ndrive/upload/" // Folder to download files to (default=`/tmp/webtorrent/`)
     };
 
     client.add(link, options, function (torrent) {
         console.log('Client is downloading:', torrent.infoHash);
         torrent.on('done', function () {
             console.log("Download finished");
-            var oldPath = "./dl/" + pathTitle;
-            var newPath = "./dl/" + title + ".mkv";
+            var oldPath = options.path + pathTitle;
+            var newPath = options.path + title;
             fs.rename(oldPath, newPath, () => { 
                 console.log("File Renamed!"); 
             }); //end rename
@@ -91,8 +91,7 @@ async function getUploadLink(newPath, _callback) {
 }
 
 function uploadVid(uploadUrl, vidPath, _callback) {
-    var fullPath = path.join(__dirname, vidPath);
-    var command = "curl -F data=@" + fullPath + " " + uploadUrl;
+    var command = "curl -F data=@" + vidPath + " " + uploadUrl;
     curl(command, _callback);
 
 }
@@ -109,6 +108,6 @@ async function curl(command, _callback) {
 
 /*
 To do: 
-        Make program get torrent links of only selected shows and download, upload and delete the file once download is finished.
+        Sync with shows.js for shows to download
 
 */
