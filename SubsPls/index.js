@@ -3,6 +3,9 @@ const Parser = require('rss-parser');
 const parser = new Parser();
 const fs = require('fs');
 const WebTorrent = require('webtorrent');
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
+//const { exec } = require('child_process');
 //const path = './shows.json';
 //const shows = require(path);
 //let rawdata = fs.readFileSync(path);
@@ -34,7 +37,8 @@ let title = new String;
 title = "[SubsPlease] Higurashi no Naku Koro ni Gou - 03 (720p) [1DEA5328].mkv";
 link = "https://nyaa.si/view/1292504/torrent";
 
-torrent(title, link);
+//torrent(title, link);
+getUploadLink("/dl/Jotaro.mp4", () => {console.log("fin");});
 
 function torrent(title, link) {
     var client = new WebTorrent()
@@ -60,7 +64,7 @@ function torrent(title, link) {
         });
         torrent.on('error', function (err) {
             console.log("Err: " + err);
-        })
+        });
     });
 }
 
@@ -84,6 +88,19 @@ async function getUploadLink(newPath, _callback) {
 }
 
 function uploadVid(uploadUrl, vidPath, _callback) {
-    
+    var fullPath = __dirname + vidPath;
+    var command = "curl -F data=@" + fullPath + " " + uploadUrl;
+    commando(command);
+    _callback();
+
 }
+
+async function commando(command) {
+    try {
+        await exec(command);
+    } catch(err) { 
+        console.error(err);
+    };
+};
+
 
