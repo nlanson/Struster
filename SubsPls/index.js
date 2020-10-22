@@ -5,7 +5,8 @@ const fs = require('fs');
 const WebTorrent = require('webtorrent');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
-//const { exec } = require('child_process');
+const path = require('path');
+
 //const path = './shows.json';
 //const shows = require(path);
 //let rawdata = fs.readFileSync(path);
@@ -15,8 +16,6 @@ let link = new String;
 let title = new String;
 
 
-/*  This code block gets titles and links from SubsPlease RSS Feed.
-    It is disabled for development.
 (async () => {
     let rssLink = "https://subsplease.org/rss/?t&r=720"; //nyaa URL
     let rssMagLink = "https://subsplease.org/rss/?r=720"; //magnet URL
@@ -24,26 +23,22 @@ let title = new String;
     console.log(feed.title);
 
     feed.items.forEach(item => {
-        var str_len = item.title.length -22;        
+        var str_len = item.title.length -22;
+        var lookingFor = "Higurashi no Naku Koro ni Gou - 03"       
+        var pathTitle = item.title;
         item.title = item.title.slice(13, str_len);
-        console.log(item.title);
-        link = item.link;
+        if(item.title == lookingFor){
+            link = item.link;
+            title = item.title;
+            torrent(title, link, pathTitle);
+        }
+        
     });
-    console.log(link);
-   
 })(); 
-*/
 
-title = "[SubsPlease] Higurashi no Naku Koro ni Gou - 03 (720p) [1DEA5328].mkv";
-link = "https://nyaa.si/view/1292504/torrent";
 
-//torrent(title, link); <-To torrent use this.
 
-getUploadLink("/dl/Jotaro.mp4", () => { //<- For testing.
-    console.log("fin");
-});
-
-function torrent(title, link) {
+function torrent(title, link, pathTitle) {
     var client = new WebTorrent()
     var options = {
         path: "./dl" // Folder to download files to (default=`/tmp/webtorrent/`)
@@ -53,22 +48,22 @@ function torrent(title, link) {
         console.log('Client is downloading:', torrent.infoHash);
         torrent.on('done', function () {
             console.log("Download finished");
-            var oldPath = "./dl/" + title;
-            var newPath = "./dl/" + "newTitle.mkv";
+            var oldPath = "/dl/" + pathTitle;
+            var newPath = "/dl/" + title + ".mkv";
             fs.rename(oldPath, newPath, () => { 
                 console.log("File Renamed!"); 
-            });
+            }); //end rename
             torrent.destroy();
             client.destroy( function () {
                 getUploadLink(newPath, () => {
                     console.log("This is the callback!!");
                 });
-            });
-        });
+            }); //end client destroy
+        });//end torrent.on done
         torrent.on('error', function (err) {
             console.log("Err: " + err);
-        });
-    });
+        });//end torrent.error
+    });//end add
 }
 
 async function getUploadLink(newPath, _callback) {
@@ -81,7 +76,7 @@ async function getUploadLink(newPath, _callback) {
         });
         res.on('end', () => {
           data = JSON.parse(data);
-          console.log(data.result.url);
+          console.log("Streamtape Upload URL: " + data.result.url);
           uploadVid(data.result.url, newPath, _callback);
         });
     }).on("error", (err) => {
@@ -91,13 +86,14 @@ async function getUploadLink(newPath, _callback) {
 }
 
 function uploadVid(uploadUrl, vidPath, _callback) {
-    var fullPath = __dirname + vidPath;
+    var fullPath = path.join(__dirname, vidPath);
     var command = "curl -F data=@" + fullPath + " " + uploadUrl;
-    commando(command, _callback);
+    curl(command, _callback);
 
 }
 
-async function commando(command) {
+async function curl(command, _callback) {
+    console.log(command);
     try {
         await exec(command);
     } catch(err) { 
