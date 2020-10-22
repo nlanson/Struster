@@ -37,16 +37,19 @@ let title = new String;
 title = "[SubsPlease] Higurashi no Naku Koro ni Gou - 03 (720p) [1DEA5328].mkv";
 link = "https://nyaa.si/view/1292504/torrent";
 
-//torrent(title, link);
-getUploadLink("/dl/Jotaro.mp4", () => {console.log("fin");});
+//torrent(title, link); <-To torrent use this.
+
+getUploadLink("/dl/Jotaro.mp4", () => { //<- For testing.
+    console.log("fin");
+});
 
 function torrent(title, link) {
     var client = new WebTorrent()
-    var opts = {
+    var options = {
         path: "./dl" // Folder to download files to (default=`/tmp/webtorrent/`)
     };
 
-    client.add(link, opts, function (torrent) {
+    client.add(link, options, function (torrent) {
         console.log('Client is downloading:', torrent.infoHash);
         torrent.on('done', function () {
             console.log("Download finished");
@@ -90,8 +93,7 @@ async function getUploadLink(newPath, _callback) {
 function uploadVid(uploadUrl, vidPath, _callback) {
     var fullPath = __dirname + vidPath;
     var command = "curl -F data=@" + fullPath + " " + uploadUrl;
-    commando(command);
-    _callback();
+    commando(command, _callback);
 
 }
 
@@ -101,6 +103,11 @@ async function commando(command) {
     } catch(err) { 
         console.error(err);
     };
+    _callback();
 };
 
+/*
+To do: 
+        Make program get torrent links of only selected shows and download, upload and delete the file once download is finished.
 
+*/
