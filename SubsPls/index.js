@@ -30,6 +30,7 @@ let title = new String;
         if(item.title == lookingFor){
             link = item.link;
             title = item.title;
+            title = title.replace(/\s/g, '-');
             torrent(title, link, pathTitle);
         }
         console.log("placeholder")
@@ -48,8 +49,13 @@ function torrent(title, link, pathTitle) {
         console.log('Client is downloading:', torrent.infoHash);
         torrent.on('done', function () {
             console.log("Download finished");
+<<<<<<< HEAD
             var oldPath = "/dl/" + pathTitle;
             var newPath = "/dl/" + title;
+=======
+            var oldPath = "./dl/" + pathTitle;
+            var newPath = "./dl/" + title + ".mkv";
+>>>>>>> a1ea79a5f4a5bfde5d347a4b3aea82bd4dc91b6f
             fs.rename(oldPath, newPath, () => { 
                 console.log("File Renamed!"); 
             }); //end rename
@@ -66,6 +72,10 @@ function torrent(title, link, pathTitle) {
             console.log("Err: " + err);
         });//end torrent.error
     });//end add
+    client.on('error', function (err) {
+        console.log(err);
+        client.destroy();
+    });
 }
 
 async function getUploadLink(newPath, _callback) {
