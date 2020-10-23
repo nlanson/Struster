@@ -49,7 +49,7 @@ let title = new String;
                     if (err) return console.log(err);
                 });
                 
-                //torrent(title, link, pathTitle)
+                torrent(title, link, pathTitle)
             }
             i++;
         }
