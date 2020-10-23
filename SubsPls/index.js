@@ -7,10 +7,10 @@ const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const path = require('path');
 
-//const path = './shows.json';
-//const shows = require(path);
-//let rawdata = fs.readFileSync(path);
-//let list = JSON.parse(rawdata);
+const jsonPath = './shows.json';
+const shows = require(jsonPath);
+let rawdata = fs.readFileSync(jsonPath);
+let list = JSON.parse(rawdata);
 
 let link = new String;
 let title = new String;
@@ -21,22 +21,35 @@ let title = new String;
     let rssMagLink = "https://subsplease.org/rss/?r=720"; //magnet URL
     let feed = await parser.parseURL(rssLink);
     console.log(feed.title);
+    var today = new Date();
+    var day = today.getDay();
 
     feed.items.forEach(item => {
-        var str_len = item.title.length -22;
-        var lookingFor = "Higurashi no Naku Koro ni Gou - 03"       
+        var str_len = item.title.length -22;    
         var pathTitle = item.title;
         item.title = item.title.slice(13, str_len);
-        if(item.title == lookingFor){
-            link = item.link;
-            title = item.title;
-            title = title.replace(/\s/g, '-');
-            torrent(title, link, pathTitle);
+        let i = 0;
+        let found = false;
+        while( i < list.showsArray.length && found != true ) {
+            var toUp = list.showsArray[i].toUp.toString();
+            if( toUp < 10 ) {
+                toUp = "0" + toUp.toString();
+            }
+            let lookingFor = list.showsArray[i].name + " - " + toUp;
+            //console.log(lookingFor + " : " + item.title);
+            
+            if( lookingFor == item.title && shows.showsArray[i].day == day ){
+                found == true;
+                link = item.link;
+                title = item.title;
+                title = title.replace(/\s/g, '-');
+                console.log(title);
+                //torrent(title, link, pathTitle)
+            }
+            i++;
         }
-        
     });
 })(); 
-
 
 
 function torrent(title, link, pathTitle) {
@@ -57,7 +70,9 @@ function torrent(title, link, pathTitle) {
             torrent.destroy();
             client.destroy( function () {
                 getUploadLink(newPath, () => {
-                    console.log("This is the callback!!");
+                    fs.unlink(newPath, () => {
+                        console.log("Video has been uploaded and deleted.");
+                    });
                 });
             }); //end client destroy
         });//end torrent.on done
