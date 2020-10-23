@@ -32,7 +32,7 @@ let title = new String;
             title = item.title;
             torrent(title, link, pathTitle);
         }
-        
+        console.log("placeholder")
     });
 })(); 
 
