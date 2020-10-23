@@ -43,51 +43,60 @@ let title = new String;
                 link = item.link;
                 title = item.title;
                 title = title.replace(/\s/g, '-');
-                
+                console.log("Found match: " + pathTitle);
                 list.showsArray[i].toUp = list.showsArray[i].toUp + 1;
                 fs.writeFile(jsonPath, JSON.stringify(list, null, 2), function writeJSON(err) {
                     if (err) return console.log(err);
                 });
                 
-                torrent(title, link, pathTitle)
+                asyncTorrentStart(title, link, pathTitle)
             }
             i++;
         }
     });
 })(); 
 
+async function asyncTorrentStart(title, link, pathTitle) {
+    console.log("async torrenting...");
+    let result = await asyncTorrentDownload(title, link, pathTitle);
+    console.log(result);
+}
 
-function torrent(title, link, pathTitle) {
-    var client = new WebTorrent()
-    var options = {
-        path: "/media/nlanson/ndrive/upload/" // Folder to download files to (default=`/tmp/webtorrent/`)
-    };
+function asyncTorrentDownload(title, link, pathTitle) {
+    return new Promise(resolve => {
+        var client = new WebTorrent()
+        var options = {
+            path: "./dl/" // Folder to download files to (default=`/tmp/webtorrent/`) Change to /media/nlanson/ndrive for pi
+        };
 
-    client.add(link, options, function (torrent) {
-        console.log('Client is downloading:', torrent.infoHash);
-        torrent.on('done', function () {
-            console.log("Download finished");
-            var oldPath = options.path + pathTitle;
-            var newPath = options.path + title;
-            fs.rename(oldPath, newPath, () => { 
-                console.log("File Renamed!"); 
-            }); //end rename
-            torrent.destroy();
-            client.destroy( function () {
-                getUploadLink(newPath, () => {
-                    fs.unlink(newPath, () => {
-                        console.log("Video has been uploaded and deleted.");
+        client.add(link, options, function (torrent) {
+            console.log('Client is downloading:', torrent.infoHash);
+            torrent.on('done', function () {
+                console.log("Download finished");
+                var oldPath = options.path + pathTitle;
+                var newPath = options.path + title;
+                newPath = __dirname + "/dl/" + title; //remove this line for pi
+                fs.rename(oldPath, newPath, () => { 
+                    console.log("File Renamed!"); 
+                }); //end rename
+                torrent.destroy();
+                client.destroy( function () {
+                    getUploadLink(newPath, () => {
+                        fs.unlink(newPath, () => {
+                            console.log("Video has been uploaded and deleted.");
+                        });
+                        resolve('resolved');
                     });
-                });
-            }); //end client destroy
-        });//end torrent.on done
-        torrent.on('error', function (err) {
-            console.log("Err: " + err);
-        });//end torrent.error
-    });//end add
-    client.on('error', function (err) {
-        console.log(err);
-        client.destroy();
+                }); //end client destroy
+            });//end torrent.on done
+            torrent.on('error', function (err) {
+                console.log("Err: " + err);
+            });//end torrent.error
+        });//end add
+        client.on('error', function (err) {
+            console.log(err);
+            client.destroy();
+        });
     });
 }
 
@@ -111,6 +120,7 @@ async function getUploadLink(newPath, _callback) {
 }
 
 function uploadVid(uploadUrl, vidPath, _callback) {
+
     var command = "curl -F data=@" + vidPath + " " + uploadUrl;
     curl(command, _callback);
 
@@ -126,8 +136,3 @@ async function curl(command, _callback) {
     _callback();
 };
 
-/*
-To do: 
-        Sync with shows.js for shows to download
-
-*/
