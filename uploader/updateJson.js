@@ -1,9 +1,9 @@
 const fs = require('fs');
 const { start } = require('repl');
-const path = './shows.json';
-const shows = require(path);
 const prompt = require('prompt-sync')();
 
+const path = './shows.json';
+const shows = require(path);
 let list = fs.readFileSync("shows.json","utf-8");
 list = JSON.parse(list);
 

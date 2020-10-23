@@ -43,7 +43,12 @@ let title = new String;
                 link = item.link;
                 title = item.title;
                 title = title.replace(/\s/g, '-');
-                console.log(title);
+                
+                list.showsArray[i].toUp = list.showsArray[i].toUp + 1;
+                fs.writeFile(jsonPath, JSON.stringify(list, null, 2), function writeJSON(err) {
+                    if (err) return console.log(err);
+                });
+                
                 //torrent(title, link, pathTitle)
             }
             i++;
