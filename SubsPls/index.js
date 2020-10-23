@@ -49,14 +49,16 @@ function torrent(title, link, pathTitle) {
         torrent.on('done', function () {
             console.log("Download finished");
             var oldPath = "/dl/" + pathTitle;
-            var newPath = "/dl/" + title + ".mkv";
+            var newPath = "/dl/" + title;
             fs.rename(oldPath, newPath, () => { 
                 console.log("File Renamed!"); 
             }); //end rename
             torrent.destroy();
             client.destroy( function () {
                 getUploadLink(newPath, () => {
-                    console.log("This is the callback!!");
+                    fs.unlink(newPath, () => {
+                        console.log("File was uploaded and deleted.")
+                    });
                 });
             }); //end client destroy
         });//end torrent.on done
