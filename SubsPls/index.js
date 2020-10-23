@@ -66,7 +66,7 @@ function asyncTorrentDownload(title, link, pathTitle) {
     return new Promise(resolve => {
         var client = new WebTorrent()
         var options = {
-            path: "./dl/" // Folder to download files to (default=`/tmp/webtorrent/`) Change to /media/nlanson/ndrive for pi
+            path: "/media/nlanson/ndrive/upload/" // Folder to download files to (default=`/tmp/webtorrent/`) Change to /media/nlanson/ndrive for pi
         };
 
         client.add(link, options, function (torrent) {
@@ -75,7 +75,7 @@ function asyncTorrentDownload(title, link, pathTitle) {
                 console.log("Download finished");
                 var oldPath = options.path + pathTitle;
                 var newPath = options.path + title;
-                newPath = __dirname + "/dl/" + title; //remove this line for pi
+                //newPath = __dirname + "/dl/" + title; //remove this line for pi
                 fs.rename(oldPath, newPath, () => { 
                     console.log("File Renamed!"); 
                 }); //end rename
