@@ -57,9 +57,7 @@ let title = new String;
 })(); 
 
 async function asyncTorrentStart(title, link, pathTitle) {
-    console.log("async torrenting...");
     let result = await asyncTorrentDownload(title, link, pathTitle);
-    console.log(result);
 }
 
 function asyncTorrentDownload(title, link, pathTitle) {
@@ -70,9 +68,9 @@ function asyncTorrentDownload(title, link, pathTitle) {
         };
 
         client.add(link, options, function (torrent) {
-            console.log('Client is downloading:', torrent.infoHash);
+            console.log('Client is downloading:', torrent.name);
             torrent.on('done', function () {
-                console.log("Download finished");
+                console.log("Download finished for: ", torrent.name);
                 var oldPath = options.path + pathTitle;
                 var newPath = options.path + title;
                 //newPath = __dirname + "/dl/" + title; //remove this line for pi
@@ -83,9 +81,9 @@ function asyncTorrentDownload(title, link, pathTitle) {
                 client.destroy( function () {
                     getUploadLink(newPath, () => {
                         fs.unlink(newPath, () => {
-                            console.log("Video has been uploaded and deleted.");
+                            console.log(torrent.name + " has been uploaded and deleted.");
                         });
-                        resolve('resolved');
+                        resolve('Resolved');
                     });
                 }); //end client destroy
             });//end torrent.on done
@@ -101,7 +99,7 @@ function asyncTorrentDownload(title, link, pathTitle) {
 }
 
 async function getUploadLink(newPath, _callback) {
-    console.log("getting link");
+    console.log("Grabbing upload link...");
     let data = '';
     
     https.get("https://api.streamtape.com/file/ul?login=09c8392061b548eebd4e&key=Z1doL1Qjm6Fq9Yd&folder=DjOleF2OpRk" , (res) => {
