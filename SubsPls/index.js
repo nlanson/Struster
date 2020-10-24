@@ -14,18 +14,20 @@ let list = JSON.parse(rawdata);
 
 let link = new String;
 let title = new String;
+const promises = [];
 
 
 (async () => {
-    let rssLink = "https://subsplease.org/rss/?t&r=720"; //nyaa URL
-    let rssMagLink = "https://subsplease.org/rss/?r=720"; //magnet URL
-    let feed = await parser.parseURL(rssLink);
+    //let rssLink = "https://subsplease.org/rss/?t&r=720"; //nyaa URL (720p)
+    let rssLink1080 = "https://subsplease.org/rss/?t&r=1080" //nyaa URL (1080p)
+    //let rssMagLink = "https://subsplease.org/rss/?r=720"; //magnet URL
+    let feed = await parser.parseURL(rssLink1080);
     console.log(feed.title);
     var today = new Date();
     var day = today.getDay();
 
     feed.items.forEach(item => {
-        var str_len = item.title.length -22;    
+        var str_len = item.title.length -23; //-22 for 720p  
         var pathTitle = item.title;
         item.title = item.title.slice(13, str_len);
         let i = 0;
@@ -49,10 +51,19 @@ let title = new String;
                     if (err) return console.log(err);
                 });
                 
-                asyncTorrentStart(title, link, pathTitle)
+                promises.push(asyncTorrentStart(title, link, pathTitle));
             }
             i++;
         }
+    });
+    await Promise.all(promises)
+    .then(response => {
+        console.log(response + "All promises have been fulfilled. Terminating.");
+        process.exit(0);
+    })
+    .catch(error => {
+        console.log(error);
+        process.exit(1);
     });
 })(); 
 
@@ -64,7 +75,7 @@ function asyncTorrentDownload(title, link, pathTitle) {
     return new Promise(resolve => {
         var client = new WebTorrent()
         var options = {
-            path: "/media/nlanson/ndrive/upload/" // Folder to download files to (default=`/tmp/webtorrent/`) Change to /media/nlanson/ndrive for pi
+            path: __dirname + "/dl/" //"/media/nlanson/ndrive/upload/" // Folder to download files to (default=`/tmp/webtorrent/`) Change to /media/nlanson/ndrive for pi
         };
 
         client.add(link, options, function (torrent) {
@@ -133,4 +144,6 @@ async function curl(command, _callback) {
     };
     _callback();
 };
+
+
 
