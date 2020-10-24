@@ -7,7 +7,7 @@ const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const path = require('path');
 
-const jsonPath = './shows.json';
+const jsonPath = __dirname +  '/shows.json';
 const shows = require(jsonPath);
 let rawdata = fs.readFileSync(jsonPath);
 let list = JSON.parse(rawdata);
@@ -110,7 +110,7 @@ async function getUploadLink(newPath, _callback) {
         });
         res.on('end', () => {
           data = JSON.parse(data);
-          console.log("Streamtape Upload URL: " + data.result.url);
+          //console.log("Streamtape Upload URL: " + data.result.url);
           uploadVid(data.result.url, newPath, _callback);
         });
     }).on("error", (err) => {
@@ -122,12 +122,12 @@ async function getUploadLink(newPath, _callback) {
 function uploadVid(uploadUrl, vidPath, _callback) {
 
     var command = "curl -F data=@" + vidPath + " " + uploadUrl;
+    console.log("Uploading...");
     curl(command, _callback);
 
 }
 
 async function curl(command, _callback) {
-    console.log(command);
     try {
         await exec(command);
     } catch(err) { 
