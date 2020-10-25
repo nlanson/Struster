@@ -22,7 +22,7 @@ const promises = [];
 main();
 
 async function main() {
-    let rssLink = "https://subsplease.org/rss/?t&r=720"; //nyaa URL (720p)
+    //let rssLink = "https://subsplease.org/rss/?t&r=720"; //nyaa URL (720p)
     let rssLink1080 = "https://subsplease.org/rss/?t&r=1080" //nyaa URL (1080p)
     //let rssMagLink = "https://subsplease.org/rss/?r=720"; //magnet URL
     let feed = await parser.parseURL(rssLink);
@@ -71,20 +71,6 @@ async function main() {
     });
 }
 
-/*
-For some unknown reason, the code does not work without the function below.
-I have tried implementing in 
-
-promises.push(() => {
-    let result = await asyncTorrentDownload(params);
-});
-
-But that didnt work due to syntax error: 
-let result = await asyncTorrentDownload(title, link, pathTitle);
-SyntaxError: await is only valid in async function
-
-So please bare with this visually unneccasary function.
-*/
 
 async function startTorrent(title, link, pathTitle) {
     let result = await asyncTorrentDownload(title, link, pathTitle);
@@ -150,13 +136,13 @@ async function getUploadLink(newPath, _callback) {
 function uploadVid(uploadUrl, vidPath, _callback) {
     console.log(vidPath);
     var command = "curl -F data=@" + vidPath + " " + uploadUrl;
-    console.log("Command generated...");
     curl(command, _callback);
 }
 
 
 async function curl(command, _callback) {
     try {
+        console.log("Uploading...")
         await exec(command);
     } catch(err) { 
         reject('cURL failed: ', err);
