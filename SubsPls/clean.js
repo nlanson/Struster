@@ -1,3 +1,4 @@
+//Dependencies
 const https = require('https');
 const Parser = require('rss-parser');
 const parser = new Parser();
@@ -7,17 +8,20 @@ const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const path = require('path');
 
+//Reading shows.json
 const jsonPath = __dirname +  '/shows.json';
 const shows = require(jsonPath);
 let rawdata = fs.readFileSync(jsonPath);
-let list = JSON.parse(rawdata);
+let list = JSON.parse(rawdata); //use list to refer to shows.json contents
 
+//initializing variables
 let link = new String;
 let title = new String;
 const promises = [];
 
+main();
 
-(async () => {
+async function main() {
     let rssLink = "https://subsplease.org/rss/?t&r=720"; //nyaa URL (720p)
     let rssLink1080 = "https://subsplease.org/rss/?t&r=1080" //nyaa URL (1080p)
     //let rssMagLink = "https://subsplease.org/rss/?r=720"; //magnet URL
@@ -51,7 +55,7 @@ const promises = [];
                     if (err) return console.log(err);
                 });
                 
-                promises.push(asyncTorrentStart(title, link, pathTitle));
+                promises.push(startTorrent(title, link, pathTitle));
             }
             i++;
         }
@@ -65,49 +69,64 @@ const promises = [];
         console.log(error);
         process.exit(1);
     });
-})(); 
+}
 
-async function asyncTorrentStart(title, link, pathTitle) {
+/*
+For some unknown reason, the code does not work without the function below.
+I have tried implementing in 
+
+promises.push(() => {
+    let result = await asyncTorrentDownload(params);
+});
+
+But that didnt work due to syntax error: 
+let result = await asyncTorrentDownload(title, link, pathTitle);
+SyntaxError: await is only valid in async function
+
+So please bare with this visually unneccasary function.
+*/
+
+async function startTorrent(title, link, pathTitle) {
     let result = await asyncTorrentDownload(title, link, pathTitle);
 }
 
+
 function asyncTorrentDownload(title, link, pathTitle) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
         var client = new WebTorrent()
         var options = {
-            path: __dirname + "/dl/" //"/media/nlanson/ndrive/upload/" // Folder to download files to (default=`/tmp/webtorrent/`) Change to /media/nlanson/ndrive for pi
+            path: "/media/nlanson/ndrive/upload/" //__dirname + "/dl/" // Folder to download files to (default=`/tmp/webtorrent/`) Change to /media/nlanson/ndrive for pi
         };
 
         client.add(link, options, function (torrent) {
             console.log('Client is downloading:', torrent.name);
+
             torrent.on('done', function () {
                 console.log("Download finished for: ", torrent.name);
                 var oldPath = options.path + pathTitle;
                 var newPath = options.path + title;
                 //newPath = __dirname + "/dl/" + title; //remove this line for pi
-                fs.rename(oldPath, newPath, () => { 
-                    console.log("File Renamed!"); 
-                }); //end rename
+                fs.rename(oldPath, newPath, () => { console.log("File Renamed!") });
                 torrent.destroy();
-                client.destroy( function () {
+                client.destroy( () => {
                     getUploadLink(newPath, () => {
-                        fs.unlink(newPath, () => {
-                            console.log(torrent.name + " has been uploaded and deleted.");
-                        });
+                        fs.unlink(newPath, () => { console.log(torrent.name + " has been uploaded and deleted.") });
                         resolve('Resolved');
                     });
                 }); //end client destroy
             });//end torrent.on done
+
             torrent.on('error', function (err) {
-                console.log("Err: " + err);
+                reject('Torrent client error: ', err);
             });//end torrent.error
         });//end add
+        
         client.on('error', function (err) {
-            console.log(err);
-            client.destroy();
-        });
+            client.destroy(() => { reject('Torrent client error: ', err) });
+        });//end error
     });
 }
+
 
 async function getUploadLink(newPath, _callback) {
     console.log("Grabbing upload link...");
@@ -123,27 +142,24 @@ async function getUploadLink(newPath, _callback) {
           uploadVid(data.result.url, newPath, _callback);
         });
     }).on("error", (err) => {
-        console.log("Error: " + err.message);
+        reject('Upload link retrieval failed: ', err);
     });
-
 }
+
 
 function uploadVid(uploadUrl, vidPath, _callback) {
-
+    console.log(vidPath);
     var command = "curl -F data=@" + vidPath + " " + uploadUrl;
-    console.log("Uploading...");
+    console.log("Command generated...");
     curl(command, _callback);
-
 }
+
 
 async function curl(command, _callback) {
     try {
         await exec(command);
     } catch(err) { 
-        console.error(err);
+        reject('cURL failed: ', err);
     };
     _callback();
 };
-
-
-
