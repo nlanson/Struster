@@ -25,13 +25,13 @@ async function main() {
     //let rssLink = "https://subsplease.org/rss/?t&r=720"; //nyaa URL (720p)
     let rssLink1080 = "https://subsplease.org/rss/?t&r=1080" //nyaa URL (1080p)
     //let rssMagLink = "https://subsplease.org/rss/?r=720"; //magnet URL
-    let feed = await parser.parseURL(rssLink);
+    let feed = await parser.parseURL(rssLink1080);
     console.log(feed.title);
     var today = new Date();
     var day = today.getDay();
 
     feed.items.forEach(item => {
-        var str_len = item.title.length -22; //-22 for 720p  
+        var str_len = item.title.length -23; //-22 for 720p  
         var pathTitle = item.title;
         item.title = item.title.slice(13, str_len);
         let i = 0;
