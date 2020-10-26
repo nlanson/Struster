@@ -1,5 +1,4 @@
 const fs = require('fs');
-const { start } = require('repl');
 const prompt = require('prompt-sync')();
 
 const path = './shows.json';
