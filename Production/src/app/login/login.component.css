@@ -28,6 +28,10 @@
   height: 100vh;
 }
 
+.loginErrorMsg {
+  color: white;
+}
+
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
   color: #3F51B5 !important;
 }
