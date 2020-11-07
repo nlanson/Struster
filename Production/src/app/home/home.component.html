@@ -53,6 +53,43 @@
   <iframe [src]="vidurl" width="100%" height="600" allowfullscreen allowtransparency allow="autoplay" scrolling="no" frameborder="0"></iframe>
   <button mat-raised-button color="accent" (click)="hideVid()" class="hideBtn">Close Video</button>
   <br>
+  <br><br><br>
+</div>
+
+<!--List-->
+<div class="list" *ngIf="showList">
+  <br>
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8"> <!--Data Source and Colums pre-defined in update() and variable initialisation-->
+
+    <ng-container matColumnDef="Name">
+      <th mat-header-cell *matHeaderCellDef> Name </th>
+      <td mat-cell *matCellDef="let video" class="tableCell"> {{video.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Size">
+      <th mat-header-cell *matHeaderCellDef> Size </th>
+      <td mat-cell *matCellDef="let video" class="tableCell"> {{video.size}} bytes </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Direct Link">
+      <th mat-header-cell *matHeaderCellDef> Direct Link </th>
+      <td mat-cell *matCellDef="let video" class="tableCell"><button mat-raised-button color="primary" (click)="navigate(video.link)">External Link <mat-icon [inline]="true">launch</mat-icon></button></td>
+    </ng-container>
+
+    <ng-container matColumnDef="Stream">
+      <th mat-header-cell *matHeaderCellDef> Stream </th>
+      <td mat-cell *matCellDef="let video" class="tableCell"><button mat-raised-button color="accent" (click)="viewFromList(video.linkid, video.name)">Watch</button></td>
+    </ng-container>
+
+    <ng-container matColumnDef="Delete">
+      <th mat-header-cell *matHeaderCellDef> Delete </th>
+      <td mat-cell *matCellDef="let video" class="tableCell"> <button mat-mini-fab color="warn" (click)="deleteVid(video.linkid)"><mat-icon>delete</mat-icon></button> </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <br>
   <br>
 </div>
 
@@ -86,40 +123,4 @@
 
     <p>Upload Link: {{  uploadLink }}</p>
   </div>
-</div>
-
-<!--List-->
-<div class="list" *ngIf="showList">
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8"> <!--Data Source and Colums pre-defined in update() and variable initialisation-->
-
-    <ng-container matColumnDef="Name">
-      <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let video" class="tableCell"> {{video.name}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="Size">
-      <th mat-header-cell *matHeaderCellDef> Size </th>
-      <td mat-cell *matCellDef="let video" class="tableCell"> {{video.size}} bytes </td>
-    </ng-container>
-
-    <ng-container matColumnDef="Direct Link">
-      <th mat-header-cell *matHeaderCellDef> Direct Link </th>
-      <td mat-cell *matCellDef="let video" class="tableCell"><button mat-raised-button color="primary" (click)="navigate(video.link)">External Link <mat-icon [inline]="true">launch</mat-icon></button></td>
-    </ng-container>
-
-    <ng-container matColumnDef="Stream">
-      <th mat-header-cell *matHeaderCellDef> Stream </th>
-      <td mat-cell *matCellDef="let video" class="tableCell"><button mat-raised-button color="accent" (click)="viewFromList(video.linkid, video.name)">Watch</button></td>
-    </ng-container>
-
-    <ng-container matColumnDef="Delete">
-      <th mat-header-cell *matHeaderCellDef> Delete </th>
-      <td mat-cell *matCellDef="let video" class="tableCell"> <button mat-mini-fab color="warn" (click)="deleteVid(video.linkid)"><mat-icon>delete</mat-icon></button> </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
-  <br>
-  <br>
 </div>
