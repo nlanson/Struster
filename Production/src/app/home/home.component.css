@@ -52,6 +52,11 @@
   text-align: center;
 }
 
+.hideBtn {
+  float:right;
+  margin: 5px;
+}
+
 .ServerError {
   text-align: center;
 }

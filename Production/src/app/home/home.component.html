@@ -4,6 +4,8 @@
   </div>
   <div class="buttons">
     <button mat-raised-button color="accent" (click)="searchBtn()" class="toolbar-buttons">Search</button>
+    <button mat-raised-button color="accent" (click)="list()" class="toolbar-buttons" *ngIf="!showList">List All</button>
+    <button mat-raised-button color="accent" (click)="closeList()" class="toolbar-buttons" *ngIf="showList">Close List</button>
     <button mat-raised-button color="accent" (click)="upload()" class="toolbar-buttons">Upload</button>
     <button mat-raised-button color="accent" (click)="update()" class="toolbar-buttons">Update Registry</button>
     <button mat-raised-button color="warn" (click)="logout()" class="toolbar-buttons">Logout</button>
@@ -11,6 +13,7 @@
 
 </mat-toolbar>
 
+<!--Search Bar-->
 <div class="searchBar" *ngIf="showSearch">
   <form flex [formGroup]="search" (ngSubmit)="submit()">
     <mat-form-field appearance="outline">
@@ -19,11 +22,10 @@
     </mat-form-field>
     <button mat-raised-button color="accent">Search!</button>
   </form>
-    <button mat-raised-button color="accent" (click)="list()" class="toolbar-buttons" *ngIf="!showList">List All</button>
-    <button mat-raised-button color="accent" (click)="closeList()" class="toolbar-buttons" *ngIf="showList">Close List</button>
+
 </div>
 
-<!--Search Bar-->
+
 <div class="searchBar" *ngIf="showUpload">
   <form flex [formGroup]="uploadForm" (ngSubmit)="remoteUpload()">
     <mat-form-field appearance="outline">
@@ -49,6 +51,9 @@
 <div class="Video" *ngIf="showVid">
   <h1 class="WhiteText vidTitle">{{vidName}}</h1>
   <iframe [src]="vidurl" width="100%" height="600" allowfullscreen allowtransparency allow="autoplay" scrolling="no" frameborder="0"></iframe>
+  <button mat-raised-button color="accent" (click)="hideVid()" class="hideBtn">Close Video</button>
+  <br>
+  <br>
 </div>
 
 <!--Server Error-->

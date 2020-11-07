@@ -16,6 +16,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
 import {MatTableModule} from '@angular/material/table';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatMenuModule} from '@angular/material/menu';
 
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
@@ -43,7 +44,7 @@ import { apiKeys, Login } from './interfaces/login';
         MatIconModule,
         MatTableModule,
         MatSnackBarModule,
-
+        MatMenuModule
   ],
   providers: [AppComponent, HomeComponent, Login, apiKeys],
   bootstrap: [AppComponent]

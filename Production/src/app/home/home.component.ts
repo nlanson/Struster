@@ -142,6 +142,7 @@ async update(){
   }//end update
 
 
+
   listSort(listArray: Array<file>){
       for(let i=0; i<listArray.length; i++){
         if(
@@ -202,6 +203,10 @@ async update(){
       this.showVid = true;
     }
   }//end load
+
+  hideVid() {
+    this.showVid = false;
+  }
 
   viewFromList(linkid: String, name: string) {
     this.showList = false;
