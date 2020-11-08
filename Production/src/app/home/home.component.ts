@@ -16,7 +16,7 @@ import {
   api_keys,
   remoteUploadRes,
   renameRes,
-  deleteRes
+  deleteRes,
  }  from '../interfaces/interfaces';
 
 
@@ -80,7 +80,7 @@ export class HomeComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private ls: LoginService,
     private route: Router,
-    private apiKeys: apiKeys
+    private apiKeys: apiKeys,
 
     ) { }
 
@@ -130,6 +130,7 @@ async update(){
     if(this.registery.result != null){
       this.listArray = this.listSort(this.registery.result.files);
     }
+
     this.dataSource = this.listArray; //List table Datasource
 
     if(this.registery.status ==  200){
@@ -143,7 +144,7 @@ async update(){
 
 
 
-  listSort(listArray: Array<file>){
+  listSort(listArray: Array<file>){ //This function is used to alter the registry api results into a more user readable list to use in the table.
       for(let i=0; i<listArray.length; i++){
         if(
           listArray[i].name.charAt(listArray[i].name.length-4) == "." &&
@@ -156,6 +157,8 @@ async update(){
           var str_len = listArray[i].name.length;
         }
         listArray[i].name = listArray[i].name.slice(0, str_len);
+
+        listArray[i].size = Math.floor(listArray[i].size/1048576);
       }
       /* This commented part returns the listArray in alphabetical order, but it is uneccesary to it is disabled.
       listArray.sort(function(a, b) {

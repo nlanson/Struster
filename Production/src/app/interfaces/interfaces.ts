@@ -64,3 +64,4 @@ export interface deleteRes {
   msg: string,
   result: boolean
 }
+
